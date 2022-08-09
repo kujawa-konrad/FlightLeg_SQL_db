@@ -68,9 +68,6 @@ shortest_flights = cur.execute('''
 SELECT tailNumber, departureTimeUtc, flightType, MIN(flightDuration) FROM FlightLeg GROUP BY flightType''').fetchall()
 print(shortest_flights)
 
-print(len(flights))
-print(len(longest_flights))
-print(len(shortest_flights))
 
 conn.close()
 
