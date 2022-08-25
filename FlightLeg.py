@@ -43,6 +43,10 @@ INSERT INTO FlightLeg (
 
 conn.commit()
 
+
+# Adding new columns
+# Flight duration in minutes & flight type ("D" for domestic, "I" for international)
+
 cur.executescript('''
 ALTER TABLE FlightLeg ADD flightDuration INTEGER;
 ALTER TABLE FlightLeg ADD flightType TEXT''')
@@ -55,10 +59,16 @@ UPDATE FlightLeg SET flightType = CASE WHEN sourceCountryCode = destinationCount
 
 conn.commit()
 
+
+# Looking for a plane with the most flights
+
 flights = cur.execute('''
 SELECT tailNumber, count(tailNumber) FROM FlightLeg GROUP BY tailNumber''').fetchall()
 max_flights = max(flights, key=lambda item:item[1])
 print(max_flights)
+
+
+# Looking for a longest and shortest flights, broken down into flight types
 
 longest_flights = cur.execute('''
 SELECT tailNumber, departureTimeUtc, flightType, MAX(flightDuration) FROM FlightLeg GROUP BY flightType''').fetchall()
